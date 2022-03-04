@@ -42,14 +42,14 @@
 
 
 
-HALIB_API extern int HA_skipLine(FILE *f)
+HALIB_API int HA_skipLine(FILE *f)
 {
-	int assigned;
+    /* Read everything but \n */
+	if (fscanf(f, "%*[^\n]") != EOF) {
+        /* Read \n */
+        fgetc(f);
+        return 1;
+    }
 
-	assigned = fscanf(f, "%*[^\n]"); /* Read everything but \n */
-	switch (assigned) {
-		case 0:			fgetc(f); return 1; /* Read \n */
-		case EOF:
-		default:		return EOF;
-	}
+    return EOF;
 }
